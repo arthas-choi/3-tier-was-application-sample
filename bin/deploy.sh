@@ -13,11 +13,11 @@ if [ -z $TOMCAT_HOME_PATH ]
 then
   echo "> TOMCAT이 발견되지 않았습니다." >> /home/ec2-user/deploy.log
 else
-  $TOMCAT_HOME_PATH/bin/shutdown.sh
+  sudo sh $TOMCAT_HOME_PATH/bin/shutdown.sh >> /home/ec2-user/deploy.log 2>/home/ec2-user/deploy_err.log
   sleep 5
 fi
 
-sudo lsof -i tcp:8080 | awk 'NR!=1 {print $2}' | xargs kill 
+sudo lsof -i tcp:8080 | awk 'NR!=1 {print $2}' | sudo xargs kill >> /home/ec2-user/deploy.log 2>/home/ec2-user/deploy_err.log
 
 echo "> 현재 실행중인 애플리케이션 pid 확인" >> /home/ec2-user/deploy.log
 CURRENT_PID=$(pgrep -f $JAR_NAME)
