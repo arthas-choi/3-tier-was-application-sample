@@ -8,7 +8,7 @@ DEPLOY_PATH=/home/ec2-user/
 cp $BUILD_JAR $DEPLOY_PATH
 
 echo "> 실행중인 Tomcat Process가 있는 경우 종료" >> /home/ec2-user/deploy.log
-TOMCAT_HOME_PATH=$(find / -name "apache-tomcat*" -type d)
+TOMCAT_HOME_PATH=$(sudo find / -name "apache-tomcat*" -type d)
 if [ -z $TOMCAT_HOME_PATH ]
 then
   echo "> TOMCAT이 발견되지 않았습니다." >> /home/ec2-user/deploy.log
