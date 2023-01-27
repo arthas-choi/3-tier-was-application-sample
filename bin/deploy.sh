@@ -7,6 +7,18 @@ echo "> build 파일 복사" >> /home/ec2-user/deploy.log
 DEPLOY_PATH=/home/ec2-user/
 cp $BUILD_JAR $DEPLOY_PATH
 
+echo "> 실행중인 Tomcat Process가 있는 경우 종료" >> /home/ec2-user/deploy.log
+TOMCAT_HOME_PATH=$(find / -name "apache-tomcat*" -type d)
+if [ -z $TOMCAT_HOME_PATH ]
+then
+  echo "> TOMCAT이 발견되지 않았습니다." >> /home/ec2-user/deploy.log
+else
+  $TOMCAT_HOME_PATH/bin/shutdown.sh
+  sleep 5
+fi
+
+sudo lsof -i tcp:8080 | awk 'NR!=1 {print $2}' | xargs kill 
+
 echo "> 현재 실행중인 애플리케이션 pid 확인" >> /home/ec2-user/deploy.log
 CURRENT_PID=$(pgrep -f $JAR_NAME)
 
